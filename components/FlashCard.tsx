@@ -166,7 +166,7 @@ export const alphabetWords = [
     german: "",
     tibetan: "ང",
     phonetic: "nga",
-    audio: "nga"
+    audio: "nga2"
   },
   {
     german: "",
