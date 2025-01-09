@@ -50,7 +50,6 @@ export default function Home() {
           </div>
 
           <div className="text-center">
-            <p className="text-xl mb-2 text-gray-700">སློབ་སྦྱོང་བྱེད།</p>
             <p className="text-lg text-gray-600">Learn & Have Fun!</p>
           </div>
         </div>
