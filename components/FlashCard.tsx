@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { Play } from 'lucide-react';
+import TibetanWordSTT from './TibetanWordSTT';
 
 export const weekdaysWords = [
   {
@@ -25,6 +26,7 @@ export const weekdaysWords = [
   {
     german: "letzte Woche",
     tibetan: "གཟའ་འཁོར་སྔོན་མ་",
+    alternatives: ["ཟའ་འཁོར་སྔོན་མ་"],
     phonetic: "za khor ngön ma",
     audio: "za khor ngön ma"
   },
@@ -332,6 +334,7 @@ interface FlashCardProps {
     tibetan: string;
     phonetic: string;
     audio: string;
+    alternatives?: string[];  // Optional array of alternative spellings
   }>;
 }
 
@@ -363,7 +366,7 @@ const FlashCard: React.FC<FlashCardProps> = ({ words }) => {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 py-12 px-4">
       <div className="max-w-lg mx-auto">
         <div className="w-full h-2 bg-gray-200 rounded-full mb-8">
-          <div 
+          <div
             className="h-full bg-blue-500 rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
@@ -376,13 +379,13 @@ const FlashCard: React.FC<FlashCardProps> = ({ words }) => {
                 {words[currentIndex].german}
               </h2>
             </div>
-            
+
             <div className="bg-gray-50 border-2 border-gray-200 rounded-xl p-8 mb-6">
               <p className="text-7xl text-center text-gray-900 leading-relaxed">
                 {words[currentIndex].tibetan}
               </p>
             </div>
-            
+
             <div className="text-center mb-4">
               <p className="text-2xl text-gray-600 font-medium">
                 {words[currentIndex].phonetic}
@@ -396,8 +399,16 @@ const FlashCard: React.FC<FlashCardProps> = ({ words }) => {
               <Play size={24} />
               <span>Play</span>
             </button>
+
+            {/* Speech-to-Text Component */}
+            <div className="mt-4 mb-4">
+              <TibetanWordSTT
+                correctWord={words[currentIndex].tibetan}
+                alternatives={words[currentIndex].alternatives}  // Add this line
+              />
+            </div>
           </div>
-          
+
           <div className="bg-gray-50 px-6 py-4 flex justify-between items-center gap-4 border-t border-gray-200">
             <button
               onClick={prevCard}
