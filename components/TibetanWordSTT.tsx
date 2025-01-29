@@ -34,45 +34,6 @@ const TibetanWordSTT = ({ correctWord, alternatives = [] }: TibetanWordSTTProps)
         return cleaned;
     };
 
-    const writeString = (view: DataView, offset: number, string: string) => {
-        for (let i = 0; i < string.length; i++) {
-            view.setUint8(offset + i, string.charCodeAt(i));
-        }
-    };
-
-    const convertToWav = async (audioBuffer: AudioBuffer) => {
-        const numOfChannels = audioBuffer.numberOfChannels;
-        const length = audioBuffer.length * numOfChannels * 2;
-        const buffer = new ArrayBuffer(44 + length);
-        const view = new DataView(buffer);
-        let offset = 0;
-
-        // WAV header
-        writeString(view, offset, 'RIFF'); offset += 4;
-        view.setUint32(offset, 36 + length, true); offset += 4;
-        writeString(view, offset, 'WAVE'); offset += 4;
-        writeString(view, offset, 'fmt '); offset += 4;
-        view.setUint32(offset, 16, true); offset += 4;
-        view.setUint16(offset, 1, true); offset += 2;
-        view.setUint16(offset, numOfChannels, true); offset += 2;
-        view.setUint32(offset, audioBuffer.sampleRate, true); offset += 4;
-        view.setUint32(offset, audioBuffer.sampleRate * 2 * numOfChannels, true); offset += 4;
-        view.setUint16(offset, numOfChannels * 2, true); offset += 2;
-        view.setUint16(offset, 16, true); offset += 2;
-        writeString(view, offset, 'data'); offset += 4;
-        view.setUint32(offset, length, true); offset += 4;
-
-        // Write audio data
-        const channelData = new Float32Array(audioBuffer.length);
-        audioBuffer.copyFromChannel(channelData, 0);
-        for (let i = 0; i < channelData.length; i++) {
-            view.setInt16(offset, channelData[i] * 32767, true);
-            offset += 2;
-        }
-
-        return new Blob([buffer], { type: 'audio/wav' });
-    };
-
     const startRecording = async () => {
         try {
             setError('');
